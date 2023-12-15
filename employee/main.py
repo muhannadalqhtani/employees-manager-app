@@ -16,7 +16,7 @@ lbl_logo.place(x=10 , y=500)
 
 
 #========= Entries frame =======
-entries_frame = Frame(root, bg='Blue')
+entries_frame = Frame(root, bg='gray')
 entries_frame.place(x=1, y=1, width=360, height=510)
 
 title = Label(entries_frame, text='Employee company ', font=('calibri', 18, 'bold'), bg='gray', fg='white')
