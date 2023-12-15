@@ -82,7 +82,8 @@ textAdress = Text(entries_frame, width=30, height=2, font=('calibri', 18), bg='w
 textAdress.place(x=10, y=330)
 
 
-
+textAdress = Text(entries_frame, width=30, height=2, font=('calibri', 18), bg='white', fg='black')
+textAdress.place(x=50, y=400)
 
 
 #========= Define=======
