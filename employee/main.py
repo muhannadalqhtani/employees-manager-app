@@ -8,7 +8,6 @@ root.resizable(True, True)
 root.configure(bg='gray')
 
 # اضافة صورة
-#
 logo = PhotoImage(file='logo1.png')
 lbl_logo = Label(root, image=logo , bg='gray')
 lbl_logo.place(x=10 , y=500)
@@ -17,7 +16,7 @@ lbl_logo.place(x=10 , y=500)
 
 
 #========= Entries frame =======
-entries_frame = Frame(root, bg='gray')
+entries_frame = Frame(root, bg='Blue')
 entries_frame.place(x=1, y=1, width=360, height=510)
 
 title = Label(entries_frame, text='Employee company ', font=('calibri', 18, 'bold'), bg='gray', fg='white')
@@ -82,8 +81,7 @@ textAdress = Text(entries_frame, width=30, height=2, font=('calibri', 18), bg='w
 textAdress.place(x=10, y=330)
 
 
-textAdress = Text(entries_frame, width=30, height=2, font=('calibri', 18), bg='white', fg='black')
-textAdress.place(x=50, y=400)
+
 
 
 #========= Define=======
@@ -92,7 +90,7 @@ def hide ():
 
     root.geometry("375x515")
 def show():
-    root.geometry('1240x615+0+0')
+    root.geometry('1240x615')
 
 
 
