@@ -1,5 +1,10 @@
 from tkinter import * 
 from tkinter import ttk
+from tkinter import messagebox
+from db import Database
+db = Database("Employee.db")
+
+
 
 root = Tk()
 root.title('تطبيق ادارة الموظفين')
@@ -7,10 +12,17 @@ root.geometry('1240x615+90+90')
 root.resizable(True, True)
 root.configure(bg='gray')
 
+name = StringVar()
+age = StringVar()
+job = StringVar()
+gender = StringVar()
+email = StringVar()
+mobile = StringVar()
+
 # اضافة صورة
-logo = PhotoImage(file='logo1.png')
+logo = PhotoImage(file='logo3.png')
 lbl_logo = Label(root, image=logo , bg='gray')
-lbl_logo.place(x=10 , y=500)
+lbl_logo.place(x=50 , y=500)
 
 
 
@@ -28,7 +40,7 @@ lblName = Label(entries_frame, text="Name", font=('calibri', 16), bg='gray', fg=
 lblName.place(x=10, y=50)
 
 # مربع الادخال 
-textName = Entry(entries_frame, width=20, font=('calibri', 18), bg='white', fg='black')
+textName = Entry(entries_frame,textvariable= name ,width=20, font=('calibri', 18), bg='white', fg='black')
 textName.place(x=120, y=50)
 
 # اسم الوظيفة
@@ -36,7 +48,7 @@ lbljob = Label(entries_frame, text="Job", font=('calibri', 16), bg='gray', fg='w
 lbljob.place(x=10, y=90)
 
 # مربع الادخال 
-textjob = Entry(entries_frame, width=20, font=('calibri', 18), bg='white', fg='black')
+textjob = Entry(entries_frame,textvariable=job, width=20, font=('calibri', 18), bg='white', fg='black')
 textjob.place(x=120, y=90)
 
 # الجنس 
@@ -44,8 +56,8 @@ lblGender = Label(entries_frame, text="Gender", font=('calibri', 16), bg='gray',
 lblGender.place(x=10, y=130)
 
 # مربع الادخال 
-comboGender = ttk.Combobox(entries_frame, width=10, font=('calibri', 16))
-comboGender['values'] = ("Male", "Female", "other")
+comboGender = ttk.Combobox(entries_frame,textvariable =gender, width=10, font=('calibri', 16))
+comboGender['values'] = ("Male","Female")
 comboGender.place(x=120, y=130)
 
 # العمر 
@@ -53,24 +65,24 @@ lblAge = Label(entries_frame, text="age", font=('calibri', 16), bg='gray', fg='w
 lblAge.place(x=10, y=170)
 
 # مريع الادخال 
-textAge = Entry(entries_frame, width=20, font=('calibri', 18), bg='white', fg='black')
+textAge = Entry(entries_frame,textvariable=age, width=20, font=('calibri', 18), bg='white', fg='black')
 textAge.place(x=120, y=170)
 
 # الايميل 
-lblEmail = Label(entries_frame, text="@Email", font=('calibri', 16), bg='gray', fg='white')
+lblEmail = Label(entries_frame, text="Email", font=('calibri', 16), bg='gray', fg='white')
 lblEmail.place(x=10, y=210)
 
 # مريع الادخال 
-textEmail = Entry(entries_frame, width=20, font=('calibri', 18), bg='white', fg='black')
+textEmail = Entry(entries_frame,textvariable=email, width=20, font=('calibri', 18), bg='white', fg='black')
 textEmail.place(x=120, y=210)
 
 # التواصل
-lblContact = Label(entries_frame, text="contact", font=('calibri', 16), bg='gray', fg='white')
-lblContact.place(x=10, y=250)
+lblmobile = Label(entries_frame, text="Contact", font=('calibri', 16), bg='gray', fg='white')
+lblmobile.place(x=10, y=250)
 
 # مريع الادخال 
-textContact = Entry(entries_frame, width=20, font=('calibri', 18), bg='white', fg='black')
-textContact.place(x=120, y=250)
+textmobile = Entry(entries_frame,textvariable=mobile, width=20, font=('calibri', 18), bg='white', fg='black')
+textmobile.place(x=120, y=250)
 
 # مكان السكن 
 lblAddress = Label(entries_frame, text="Address :", font=('calibri', 16), bg='gray', fg='white')
@@ -87,7 +99,6 @@ textAdress.place(x=10, y=330)
 #========= Define=======
 
 def hide ():
-
     root.geometry("375x515")
 def show():
     root.geometry('1240x615')
@@ -99,25 +110,91 @@ btnhide.place(x=270 , y=10)
 
 btnshow = Button(entries_frame , text='SHOW' ,cursor='hand2', command=show)
 btnshow.place(x=320 , y=10)
+# داله تأخذ بيانات من قاعدة بياتات
+def getData(event):
+    selected_row = tv.focus()
+    data = tv.item(selected_row)
+    global row 
+    row = data ["values"]
+    name.set(row[1])
+    age.set(row[2])
+    job.set(row[3])
+    email.set(row[4])
+    gender.set(row[5])
+    mobile.set(row[6])
+    textAdress.delete(1.0,END)
+    textAdress.insert(END,row)
+# دوال هذي دالة حذف 
+def delete():
+     db.remove(row[0])
+     Clear()
+     displayAll()
 
+ #دالة تظهر كل المعلومات    
+def displayAll():
+        tv.delete(*tv.get_children())
+        for row in db.fetch():
+            tv.insert("",END,values=row)
+# تنظثيف 
+def Clear():
+    name.set("")
+    age.set("")
+    job.set("")
+    gender.set("")
+    email.set("")
+    mobile.set("")
+    textAdress.delete(1.0,END)
 
+# دالة اضافة
+def add_employee():
+    if textName.get() == "" or textAge.get() == "" or textjob.get() == "" or textEmail.get() == "" or comboGender.get() == "" or textmobile.get() == "" or textAdress.get(1.0,END) == "":
+        messagebox.showerror("Error")
+        return
+    
+    db.insert( 
+        textName.get(),
+        textAge.get(),
+        textjob.get(),
+        textEmail.get(),
+        comboGender.get(),
+        textmobile.get(),
+        textAdress.get(1.0,END))
 
-
-
+    messagebox.showinfo("Success","Added new Employee")
+    Clear()
+    displayAll()
+      # دالة تحديث البيانات  
+def update():
+    if textName.get() == "" or textAge.get() == "" or textjob.get() == "" or textEmail.get() == "" or comboGender.get() == "" or textmobile.get() == "" or textAdress.get(1.0,END) == "":
+        messagebox.showerror("Error")
+        return 
+    db.update(row[0],
+        textName.get(),
+        textAge.get(),
+        textjob.get(),
+        textEmail.get(),
+        comboGender.get(),
+        textmobile.get(),
+        textAdress.get(1.0,END)
+        )
+    messagebox.showinfo('Success','The employee date is update')
+    Clear()
+    displayAll()
+              
 # الازرار 
 btn_frame = Frame(entries_frame, bg='gray', bd=1, relief=SOLID)
 btn_frame.place(x=8, y=400, width=335, height=100)
 
-btnAdd = Button(btn_frame, text='Add details', width=14, height=1, font=('calibri', 18), fg='white', bg='#16a085', bd=0)
+btnAdd = Button(btn_frame, text='Add details', width=14, height=1, font=('calibri', 18), fg='white', bg='#16a085', bd=0,command=add_employee)
 btnAdd.place(x=4, y=5)
 
-btnEdit = Button(btn_frame, text='Update details', width=14, height=1, font=('calibri', 18), fg='white', bg='#2980b9', bd=0)
+btnEdit = Button(btn_frame, text='Update details', width=14, height=1, font=('calibri', 18), fg='white', bg='#2980b9', bd=0,command=update)
 btnEdit.place(x=4, y=50)
 
-btnDelete = Button(btn_frame, text='Delete details', width=14, height=1, font=('calibri', 18), fg='white', bg='#c0392b', bd=0)
+btnDelete = Button(btn_frame, text='Delete details', width=14, height=1, font=('calibri', 18), fg='white', bg='#c0392b', bd=0, command=delete)
 btnDelete.place(x=170, y=5)
 
-btnClear = Button(btn_frame, text='Clear details', width=14, height=1, font=('calibri', 18), fg='white', bg='#f39c12', bd=0)
+btnClear = Button(btn_frame, text='Clear details', width=14, height=1, font=('calibri', 18), fg='white', bg='#f39c12', bd=0, command=Clear)
 btnClear.place(x=170, y=50)
 
 #------- Table Frame --------------
@@ -158,7 +235,10 @@ tv.column("8",width="150")
 #يظهر الاكواد بشكل مرتب
 tv['show']='headings'
 # يظهر في اعلى برنامج
-tv.place(x=1 , y=1, height=610 )
 
+tv.bind("<ButtonRelease-1>",getData)
+tv.place(x=1,y=1,height=610)
+
+displayAll()    
 
 root.mainloop()
