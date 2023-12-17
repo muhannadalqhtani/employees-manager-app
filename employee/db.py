@@ -22,7 +22,7 @@ class Database:
         self.con.commit()
       # ادخال  الى قاعدة بيانات
     def insert(self, name, age, job, email, gender, mobile, address):
-        self.cur.execute("INSERT INTO employees VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)",
+        self.cur.execute("insert INTO employees VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)",
                          (name, age, job, email, gender, mobile, address))
         self.con.commit()
         # يحدد موظفين بعدها يرتب لك
@@ -39,3 +39,5 @@ class Database:
         self.cur.execute("UPDATE employees SET name=?, age=?, job=?, email=?, gender=?, mobile=?, address=? WHERE id=?",
                          (name, age, job, email, gender, mobile, address, id))
         self.con.commit()
+
+
