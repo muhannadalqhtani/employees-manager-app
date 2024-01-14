@@ -8,7 +8,7 @@ db = Database("Employee.db")
 
 root = Tk()
 root.title('تطبيق ادارة الموظفين')
-root.geometry('1240x615+90+90')
+root.geometry('1240x615+100+100')
 root.resizable(True, True)
 root.configure(bg='gray')
 
@@ -20,9 +20,9 @@ email = StringVar()
 mobile = StringVar()
 
 # اضافة صورة
-logo = PhotoImage(file='logo3.png')
+logo = PhotoImage(file='logo2.png')
 lbl_logo = Label(root, image=logo , bg='gray')
-lbl_logo.place(x=50 , y=500)
+lbl_logo.place(x=-900 , y=200)
 
 
 
